@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 
 const Person = (props) => {
+  const [stateArr, setStateArr] = useState([]);
   return (
     <div>
       <p>
