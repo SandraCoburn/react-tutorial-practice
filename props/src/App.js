@@ -8,21 +8,33 @@ class App extends React.Component {
     super();
     this.state = {
       persons: [
-        { name: "Sean", age: 17 },
-        { name: "Jackie", age: 16 },
-        { name: "JRyan", age: 12 },
+        { id: 11, name: "Sean", age: 17 },
+        { id: 22, name: "Jackie", age: 16 },
+        { id: 33, name: "JRyan", age: 12 },
       ],
     };
   }
 
-  nameChangeHandler = (event) => {
-    this.setState({
-      persons: [
-        { name: "Sean", age: 17 },
-        { name: event.target.value, age: 13 },
-        { name: "Jackie", age: 16 },
-      ],
+  nameChangeHandler = (event, id) => {
+    const personIndex = this.state.persons.findIndex((p) => {
+      //returns true or false
+      return p.id === id;
     });
+    const person = { ...this.state.persons[personIndex] };
+    //const person = Object.assign({}, this.state.persons[personIndex]) //the same as line 22 different syntax
+    person.name = event.target.value;
+
+    const persons = [...this.state.persons];
+    persons[personIndex] = person;
+    this.setState({ persons: persons });
+
+    // this.setState({
+    //   persons: [
+    //     { name: "Sean", age: 17 },
+    //     { name: event.target.value, age: 13 },
+    //     { name: "Jackie", age: 16 },
+    //   ],
+    // });
   };
   // switchNameHandler = (newName) => {
   //   // console.log("was clicke");
@@ -38,7 +50,8 @@ class App extends React.Component {
   // };
 
   deletePersonHandler = (personIndex) => {
-    const persons = this.state.persons;
+    //const persons = this.state.persons.slice(); //slice will make a copy of the whole array
+    const persons = [...this.state.persons];
     persons.splice(personIndex, 1);
     this.setState({ persons: persons });
   };
@@ -65,9 +78,10 @@ class App extends React.Component {
             return (
               <Person
                 click={() => this.deletePersonHandler(index)}
-                // key={index}
+                key={person.id}
                 name={person.name}
                 age={person.age}
+                changed={(event) => this.nameChangeHandler(event, person.id)}
               />
             );
           })}
